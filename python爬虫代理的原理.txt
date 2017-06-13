@@ -1,0 +1,27 @@
+使用代理的步骤如下：
+(1) proxy_support=urllib.request.ProxyHandler({})
+#参数是一个字典，字典的键是代理的类型，例如http、ftp或https，字典的值就是代理的IP地址和对应的端口号。
+
+(2) opener=urllib.request.build_opener(proxy_support)
+#opener可以看作是一个私人定制，当使用urlopen()函数打开一个网页的时候，你就是使用默认的opener在工作。
+#而这个opener是可以定制的，例如，给它定制特殊的headers，或者给它定制指定的代理IP
+
+(3)urllib.request.install_opener(opener)
+#这里是定制好的opener安装到系统中，这是一劳永逸的做法。
+#因此在此之后，你只要使用普通的urlopen()函数，就是以定制好的opener进行工作的。
+#如果不想替换掉默认的opener,可以在每次特殊需要的时候，用opener.open()的方法打开网页
+
+eg:
+
+import urllib.request
+enable_proxy = True
+proxy_handler = urllib.request.ProxyHandler({"http" : 'http://some-proxy.com:8080'})
+null_proxy_handler = urllib.request.ProxyHandler({})
+if enable_proxy:
+    opener = urllib.request.build_opener(proxy_handler)
+else:
+    opener = urllib.request.build_opener(null_proxy_handler)
+urllib.request.install_opener(opener)
+
+(4)
+#通过访问http://www.whatismyip.com.tw可以查看当前IP
